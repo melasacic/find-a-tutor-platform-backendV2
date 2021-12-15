@@ -1,7 +1,7 @@
 package com.findTutor.findTutor;
 
-import com.findTutor.findTutor.database.Tutor;
-import com.findTutor.findTutor.database.TutorRepository;
+import com.findTutor.findTutor.database.tutor.model.DBTutor;
+import com.findTutor.findTutor.database.tutor.TutorRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +14,7 @@ public class TutorConfig {
     @Bean
     CommandLineRunner commandLineRunner(TutorRepository repository){
         return args -> {
-           Tutor mela= new Tutor(
+           DBTutor mela= new DBTutor(
                     "Mela",
                     "Sacic",
                     "mellsacic",
@@ -24,7 +24,7 @@ public class TutorConfig {
                     "060/319-2739"
             );
 
-            Tutor nihad= new Tutor(
+            DBTutor nihad= new DBTutor(
                     "Nihad",
                     "Hrnjic",
                     "nhrnjic",

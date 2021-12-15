@@ -1,14 +1,14 @@
-package com.findTutor.findTutor.database;
+package com.findTutor.findTutor.database.tutor.model;
 
 import javax.persistence.*;
 
 @Entity
 @Table
-public class Tutor {
+public class DBTutor {
 
     @Id
     @SequenceGenerator(
-            name="tutor_sequence",
+            name = "tutor_sequence",
             sequenceName = "tutor_sequence",
             allocationSize = 1
     )
@@ -26,17 +26,17 @@ public class Tutor {
     private String city;
     private String phoneNumber;
 
-    public Tutor() {
+    public DBTutor() {
     }
 
-    public Tutor(Long id,
-                 String firstName,
-                 String lastName,
-                 String username,
-                 String password,
-                 String email,
-                 String city,
-                 String phoneNumber) {
+    public DBTutor(Long id,
+                   String firstName,
+                   String lastName,
+                   String username,
+                   String password,
+                   String email,
+                   String city,
+                   String phoneNumber) {
 
         this.id = id;
         this.firstName = firstName;
@@ -48,13 +48,13 @@ public class Tutor {
         this.phoneNumber = phoneNumber;
     }
 
-    public Tutor(String firstName,
-                 String lastName,
-                 String username,
-                 String password,
-                 String email,
-                 String city,
-                 String phoneNumber) {
+    public DBTutor(String firstName,
+                   String lastName,
+                   String username,
+                   String password,
+                   String email,
+                   String city,
+                   String phoneNumber) {
 
         this.firstName = firstName;
         this.lastName = lastName;

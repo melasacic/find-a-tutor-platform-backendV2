@@ -16,7 +16,6 @@ public interface TutorRepository extends JpaRepository <DBTutor, Long> {
     @Query("SELECT t FROM DBTutor t WHERE t.email =?1")
     Optional<DBTutor> findTutorByEmail(String email);
 
-    @Query ("SELECT t FROM DBTutor t WHERE t.id =?1")
-    Optional<DBTutor> findTutorById(Long id);
+
 
 }

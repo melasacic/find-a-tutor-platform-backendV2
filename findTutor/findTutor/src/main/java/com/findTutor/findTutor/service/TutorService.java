@@ -56,25 +56,25 @@ public class TutorService {
         // ako jeste, bacit IllegalStateException
 
         if(tutorCreateRequest.getFirstName()==null){
-            throw new IllegalStateException("value is null");
+            throw new IllegalStateException("first name can not be null");
         }
         if(tutorCreateRequest.getLastName()==null){
-            throw new IllegalStateException("value is null");
+            throw new IllegalStateException("last name can not be null");
         }
         if(tutorCreateRequest.getUsername()==null){
-            throw new IllegalStateException("value is null");
+            throw new IllegalStateException("username can not be null");
         }
         if(tutorCreateRequest.getPassword()==null){
-            throw new IllegalStateException("value is null");
+            throw new IllegalStateException("password can not be null null");
         }
         if(tutorCreateRequest.getEmail()==null){
-            throw new IllegalStateException("value is null");
+            throw new IllegalStateException("email can not be null");
         }
         if(tutorCreateRequest.getCity()==null){
-            throw new IllegalStateException("value is null");
+            throw new IllegalStateException("city can not be null");
         }
         if(tutorCreateRequest.getPhoneNumber()==null){
-            throw new IllegalStateException("value is null");
+            throw new IllegalStateException("phone number can not be null");
         }
 
 
@@ -82,7 +82,6 @@ public class TutorService {
 
         if(tutorOptional.isPresent()){
             throw new IllegalStateException("email taken");
-
         }else{
             DBTutor tutor=new DBTutor();
 
@@ -116,9 +115,9 @@ public class TutorService {
     // 2. ako polje iz requesta nije null, nasetat to polje na db tutora, ako je null - ignorisat
     // nakon sto si sva polja provjerila i nasetala, spasit updatean db tutor ponovo u bazu
 
-    public void updateTutor(TutorCreateUpdate tutorCreateUpdate){
+    public void updateTutor(Long tutorId, TutorCreateUpdate tutorCreateUpdate){
 
-        Optional <DBTutor> tutors= tutorRepository.findTutorById(tutorCreateUpdate.getId());
+        Optional<DBTutor> tutors = tutorRepository.findById(tutorId);
 
         DBTutor tutor=new DBTutor();
 
@@ -140,8 +139,9 @@ public class TutorService {
         if(tutorCreateUpdate.getPhoneNumber()!=null){
             tutor.setPhoneNumber(tutorCreateUpdate.getPhoneNumber());
         }
-        tutorRepository.save(tutor);
+       tutorRepository.save(tutor);
     }
+
 
 
 }

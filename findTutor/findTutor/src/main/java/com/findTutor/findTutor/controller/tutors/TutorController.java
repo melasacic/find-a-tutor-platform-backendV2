@@ -37,8 +37,8 @@ public class TutorController {
     }
 
 
-    @PutMapping(path = {"tutorId"})
-    public void updateTutor(@PathVariable("tutorId") Long id, @RequestBody TutorCreateUpdate tutorCreateUpdate) {
-        tutorService.updateTutor(tutorCreateUpdate);
+   @PatchMapping("/{tutorId}")
+    public void updateTutor(@PathVariable("tutorId") Long id,@RequestBody TutorCreateUpdate tutorCreateUpdate) {
+        tutorService.updateTutor(id, tutorCreateUpdate);
     }
 }

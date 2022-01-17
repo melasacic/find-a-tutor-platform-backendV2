@@ -119,27 +119,27 @@ public class TutorService {
 
         Optional<DBTutor> tutors = tutorRepository.findById(tutorId);
 
-        DBTutor tutor=new DBTutor();
+        DBTutor tutorUpdate=tutors.get();
 
         if(tutorCreateUpdate.getFirstName()!=null){
-            tutor.setFirstName(tutorCreateUpdate.getFirstName());
+            tutorUpdate.setFirstName(tutorCreateUpdate.getFirstName());
         }
         if (tutorCreateUpdate.getLastName()!=null){
-            tutor.setLastName(tutorCreateUpdate.getLastName());
+            tutorUpdate.setLastName(tutorCreateUpdate.getLastName());
         }
         if(tutorCreateUpdate.getUsername()!=null){
-            tutor.setUsername(tutorCreateUpdate.getUsername());
+            tutorUpdate.setUsername(tutorCreateUpdate.getUsername());
         }
         if(tutorCreateUpdate.getEmail()!=null){
-            tutor.setEmail(tutorCreateUpdate.getEmail());
+            tutorUpdate.setEmail(tutorCreateUpdate.getEmail());
         }
         if(tutorCreateUpdate.getCity()!=null){
-            tutor.setCity(tutorCreateUpdate.getCity());
+            tutorUpdate.setCity(tutorCreateUpdate.getCity());
         }
         if(tutorCreateUpdate.getPhoneNumber()!=null){
-            tutor.setPhoneNumber(tutorCreateUpdate.getPhoneNumber());
+            tutorUpdate.setPhoneNumber(tutorCreateUpdate.getPhoneNumber());
         }
-       tutorRepository.save(tutor);
+       tutorRepository.save(tutorUpdate);
     }
 
 

@@ -1,6 +1,6 @@
-package com.findTutor.findTutor.database.tutor;
+package com.findTutor.findTutor.database.user;
 
-import com.findTutor.findTutor.database.tutor.model.DBTutor;
+import com.findTutor.findTutor.database.user.model.DBUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -11,10 +11,10 @@ import java.util.Optional;
 // we use this interface inside service
 // tutor- type we want this repository to work on   Long- type of id in Tutor class
 @Repository
-public interface TutorRepository extends JpaRepository <DBTutor, Long> {
+public interface UserRepository extends JpaRepository<DBUser, Long> {
 
-    @Query("SELECT t FROM DBTutor t WHERE t.email =?1")
-    Optional<DBTutor> findTutorByEmail(String email);
+    @Query("SELECT t FROM DBUser t WHERE t.email =?1")
+    Optional<DBUser> findUserByEmail(String email);
 
-    Optional<DBTutor> findByEmailAndPassword(String email, String password);
+    Optional<DBUser> findByEmailAndPassword(String email, String password);
 }

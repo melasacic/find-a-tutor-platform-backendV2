@@ -1,10 +1,11 @@
 package com.findTutor.findTutor.service;
 
-import com.findTutor.findTutor.controller.tutors.model.TutorCreateRequest;
-import com.findTutor.findTutor.controller.tutors.model.TutorCreateUpdate;
-import com.findTutor.findTutor.controller.tutors.model.TutorResponse;
-import com.findTutor.findTutor.database.tutor.model.DBTutor;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.findTutor.findTutor.controller.tutors.model.*;
 import com.findTutor.findTutor.database.tutor.TutorRepository;
+import com.findTutor.findTutor.database.tutor.model.DBTutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,17 +23,17 @@ public class TutorService {
         this.tutorRepository = tutorRepository;
     }
 
-    public List<TutorResponse> getTutors(){
+    public List<TutorResponse> getTutors() {
 
         // 1. Get list of DBTutors from DB
 
-        List<DBTutor> tutors=tutorRepository.findAll();
+        List<DBTutor> tutors = tutorRepository.findAll();
 
         // 2. Convert this list into list of TutorResponse
 
-        List<TutorResponse> tutorResponses=new ArrayList<>();
+        List<TutorResponse> tutorResponses = new ArrayList<>();
         tutors.forEach(dbTutor -> {
-            TutorResponse tutorResponse=new TutorResponse();
+            TutorResponse tutorResponse = new TutorResponse();
             tutorResponse.setId(dbTutor.getId());
             tutorResponse.setFirstName(dbTutor.getFirstName());
             tutorResponse.setLastName(dbTutor.getLastName());
@@ -55,35 +56,35 @@ public class TutorService {
         // validirat da nijedno polje nije null
         // ako jeste, bacit IllegalStateException
 
-        if(tutorCreateRequest.getFirstName()==null){
+        if (tutorCreateRequest.getFirstName() == null) {
             throw new IllegalStateException("first name can not be null");
         }
-        if(tutorCreateRequest.getLastName()==null){
+        if (tutorCreateRequest.getLastName() == null) {
             throw new IllegalStateException("last name can not be null");
         }
-        if(tutorCreateRequest.getUsername()==null){
+        if (tutorCreateRequest.getUsername() == null) {
             throw new IllegalStateException("username can not be null");
         }
-        if(tutorCreateRequest.getPassword()==null){
+        if (tutorCreateRequest.getPassword() == null) {
             throw new IllegalStateException("password can not be null null");
         }
-        if(tutorCreateRequest.getEmail()==null){
+        if (tutorCreateRequest.getEmail() == null) {
             throw new IllegalStateException("email can not be null");
         }
-        if(tutorCreateRequest.getCity()==null){
+        if (tutorCreateRequest.getCity() == null) {
             throw new IllegalStateException("city can not be null");
         }
-        if(tutorCreateRequest.getPhoneNumber()==null){
+        if (tutorCreateRequest.getPhoneNumber() == null) {
             throw new IllegalStateException("phone number can not be null");
         }
 
 
-        Optional<DBTutor> tutorOptional=tutorRepository.findTutorByEmail((tutorCreateRequest.getEmail()));
+        Optional<DBTutor> tutorOptional = tutorRepository.findTutorByEmail((tutorCreateRequest.getEmail()));
 
-        if(tutorOptional.isPresent()){
+        if (tutorOptional.isPresent()) {
             throw new IllegalStateException("email taken");
-        }else{
-            DBTutor tutor=new DBTutor();
+        } else {
+            DBTutor tutor = new DBTutor();
 
             tutor.setFirstName(tutorCreateRequest.getFirstName());
             tutor.setLastName(tutorCreateRequest.getLastName());
@@ -97,9 +98,9 @@ public class TutorService {
         }
     }
 
-    public void deleteTutor(Long tutorId){
-        boolean exists=tutorRepository.existsById(tutorId);
-        if(!exists){
+    public void deleteTutor(Long tutorId) {
+        boolean exists = tutorRepository.existsById(tutorId);
+        if (!exists) {
             throw new IllegalStateException(
                     "tutor with id " + tutorId + "does not exist!");
         }
@@ -115,33 +116,56 @@ public class TutorService {
     // 2. ako polje iz requesta nije null, nasetat to polje na db tutora, ako je null - ignorisat
     // nakon sto si sva polja provjerila i nasetala, spasit updatean db tutor ponovo u bazu
 
-    public void updateTutor(Long tutorId, TutorCreateUpdate tutorCreateUpdate){
+    public void updateTutor(Long tutorId, TutorCreateUpdate tutorCreateUpdate) {
 
         Optional<DBTutor> tutors = tutorRepository.findById(tutorId);
 
-        DBTutor tutorUpdate=tutors.get();
+        DBTutor tutorUpdate = tutors.get();
 
-        if(tutorCreateUpdate.getFirstName()!=null){
+        if (tutorCreateUpdate.getFirstName() != null) {
             tutorUpdate.setFirstName(tutorCreateUpdate.getFirstName());
         }
-        if (tutorCreateUpdate.getLastName()!=null){
+        if (tutorCreateUpdate.getLastName() != null) {
             tutorUpdate.setLastName(tutorCreateUpdate.getLastName());
         }
-        if(tutorCreateUpdate.getUsername()!=null){
+        if (tutorCreateUpdate.getUsername() != null) {
             tutorUpdate.setUsername(tutorCreateUpdate.getUsername());
         }
-        if(tutorCreateUpdate.getEmail()!=null){
+        if (tutorCreateUpdate.getEmail() != null) {
             tutorUpdate.setEmail(tutorCreateUpdate.getEmail());
         }
-        if(tutorCreateUpdate.getCity()!=null){
+        if (tutorCreateUpdate.getCity() != null) {
             tutorUpdate.setCity(tutorCreateUpdate.getCity());
         }
-        if(tutorCreateUpdate.getPhoneNumber()!=null){
+        if (tutorCreateUpdate.getPhoneNumber() != null) {
             tutorUpdate.setPhoneNumber(tutorCreateUpdate.getPhoneNumber());
         }
-       tutorRepository.save(tutorUpdate);
+        tutorRepository.save(tutorUpdate);
     }
 
+    public LoginResponse getTutorToken(LoginTutorModel model) {
+        DBTutor tutor = tutorRepository.findByEmailAndPassword(model.getEmail(), model.getPassword())
+                .orElseThrow(() -> new IllegalStateException("Invalid username or password"));
 
+        Algorithm algorithm = Algorithm.HMAC256("secret");
+        String token = JWT.create()
+                .withIssuer("tutorServer")
+                .withClaim("id", tutor.getId())
+                .withClaim("type", "tutor")
+                .sign(algorithm);
 
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setToken(token);
+        return loginResponse;
+    }
+
+    public void validateToken(String token, String id){
+        DecodedJWT jwt = JWT.decode(token);
+
+        String type = jwt.getClaim("type").toString();
+
+        if(type.equals("tutor") && !id.equals(jwt.getClaim("id").toString())){
+            throw new IllegalStateException("Invalid token");
+        }
+    }
 }

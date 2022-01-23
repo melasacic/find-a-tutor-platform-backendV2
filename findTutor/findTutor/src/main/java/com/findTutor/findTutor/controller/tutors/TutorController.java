@@ -1,6 +1,7 @@
 package com.findTutor.findTutor.controller.tutors;
 
 import com.findTutor.findTutor.controller.tutors.model.*;
+import com.findTutor.findTutor.database.tutor.model.DBTutor;
 import com.findTutor.findTutor.service.TutorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,10 +26,29 @@ public class TutorController {
         return tutorService.getTutors();
     }
 
+    @GetMapping("/details")
+    public TutorResponse getTutorDetails(@RequestHeader("Authorization") String token) {
+        return tutorService.getTutorDetails(token);
+    }
+
     // we take RequestBody and then we map it into an tutor
     @PostMapping
     public void registerNewTutor(@RequestBody TutorCreateRequest tutorCreateRequest) {
         tutorService.addNewTutor(tutorCreateRequest);
+    }
+
+    @PostMapping("/rate/{tutorId}")
+    public RatingModel rateTutor(
+            @RequestHeader("Authorization") String token,
+            @RequestBody RatingModel ratingModel,
+            @PathVariable("tutorId") Long id) {
+        tutorService.validateType(token, "user");
+        DBTutor tutor = tutorService.rateTutor(ratingModel, id);
+
+        RatingModel model = new RatingModel();
+        model.setRating(tutor.getRating());
+
+        return model;
     }
 
     @DeleteMapping(path = "{tutorId}")

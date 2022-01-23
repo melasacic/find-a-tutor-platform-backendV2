@@ -15,6 +15,7 @@ public class TutorResponse {
     private String email;
     private String city;
     private String phoneNumber;
+    private Double rating;
 
     public TutorResponse() {
     }
@@ -89,6 +90,14 @@ public class TutorResponse {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Double getRating() {
+        return rating == null ? 0 : rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 
     @Override

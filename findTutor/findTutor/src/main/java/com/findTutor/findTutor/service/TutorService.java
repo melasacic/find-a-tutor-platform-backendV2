@@ -41,6 +41,7 @@ public class TutorService {
             tutorResponse.setEmail(dbTutor.getEmail());
             tutorResponse.setCity(dbTutor.getCity());
             tutorResponse.setPhoneNumber(dbTutor.getPhoneNumber());
+            tutorResponse.setRating(dbTutor.getRating());
 
             tutorResponses.add(tutorResponse);
         });
@@ -48,6 +49,30 @@ public class TutorService {
         // 3. return this new list
 
         return tutorResponses;
+    }
+
+    public TutorResponse getTutorDetails(String token) {
+        DecodedJWT jwt = JWT.decode(token);
+        String type = jwt.getClaim("type").asString();
+
+        if (!"tutor".equals(type)) {
+            throw new IllegalStateException("Invalid token type");
+        }
+
+        String tutorId = jwt.getClaim("id").toString();
+
+        DBTutor dbTutor = tutorRepository.getById(Long.valueOf(tutorId));
+        TutorResponse tutorResponse = new TutorResponse();
+        tutorResponse.setId(dbTutor.getId());
+        tutorResponse.setFirstName(dbTutor.getFirstName());
+        tutorResponse.setLastName(dbTutor.getLastName());
+        tutorResponse.setUsername(dbTutor.getUsername());
+        tutorResponse.setEmail(dbTutor.getEmail());
+        tutorResponse.setCity(dbTutor.getCity());
+        tutorResponse.setPhoneNumber(dbTutor.getPhoneNumber());
+        tutorResponse.setRating(dbTutor.getRating());
+
+        return tutorResponse;
     }
 
     public void addNewTutor(TutorCreateRequest tutorCreateRequest) {
@@ -159,13 +184,39 @@ public class TutorService {
         return loginResponse;
     }
 
-    public void validateToken(String token, String id){
+    public void validateToken(String token, String id) {
         DecodedJWT jwt = JWT.decode(token);
 
         String type = jwt.getClaim("type").toString();
 
-        if(type.equals("tutor") && !id.equals(jwt.getClaim("id").toString())){
+        if (type.equals("tutor") && !id.equals(jwt.getClaim("id").toString())) {
             throw new IllegalStateException("Invalid token");
         }
+    }
+
+    public void validateType(String token, String expectedType) {
+        DecodedJWT jwt = JWT.decode(token);
+        String type = jwt.getClaim("type").asString();
+
+        if (!expectedType.equals(type)) {
+            throw new IllegalStateException("Invalid token type " + token);
+        }
+    }
+
+    public DBTutor rateTutor(RatingModel ratingModel, Long id) {
+        DBTutor dbTutor = tutorRepository.getById(id);
+        if (dbTutor == null) {
+            throw new IllegalStateException("Tutor with id does not exist " + id);
+        }
+
+        if(dbTutor.getRating() == null){
+            dbTutor.setRating(ratingModel.getRating());
+        }else{
+            Double newRating = (dbTutor.getRating() + ratingModel.getRating()) / 2;
+            dbTutor.setRating(newRating);
+        }
+
+        tutorRepository.save(dbTutor);
+        return dbTutor;
     }
 }

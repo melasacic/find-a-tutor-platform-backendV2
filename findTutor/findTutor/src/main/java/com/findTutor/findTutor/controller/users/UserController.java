@@ -1,9 +1,6 @@
 package com.findTutor.findTutor.controller.users;
 
-import com.findTutor.findTutor.controller.users.model.LoginUserModel;
-import com.findTutor.findTutor.controller.users.model.UserCreateRequest;
-import com.findTutor.findTutor.controller.users.model.UserCreateUpdate;
-import com.findTutor.findTutor.controller.users.model.UserResponse;
+import com.findTutor.findTutor.controller.users.model.*;
 import com.findTutor.findTutor.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -63,11 +60,16 @@ public class UserController {
     }
 
     @PostMapping("/token")
-    public ResponseEntity<String> getUserToken(@RequestBody LoginUserModel loginUserModel) {
+    public ResponseEntity<LoginUserResponse> getUserToken(@RequestBody LoginUserModel loginUserModel) {
         try {
             return ResponseEntity.ok(userService.getUserToken(loginUserModel));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+    }
+
+    @GetMapping("/details")
+    public UserResponse getTutorDetails(@RequestHeader("Authorization") String token) {
+        return userService.getUserDetails(token);
     }
 }

@@ -3,10 +3,9 @@ package com.findTutor.findTutor.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.findTutor.findTutor.controller.users.model.LoginUserModel;
-import com.findTutor.findTutor.controller.users.model.UserCreateRequest;
-import com.findTutor.findTutor.controller.users.model.UserCreateUpdate;
-import com.findTutor.findTutor.controller.users.model.UserResponse;
+import com.findTutor.findTutor.controller.tutors.model.TutorResponse;
+import com.findTutor.findTutor.controller.users.model.*;
+import com.findTutor.findTutor.database.tutor.model.DBTutor;
 import com.findTutor.findTutor.database.user.UserRepository;
 import com.findTutor.findTutor.database.user.model.DBUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,16 +145,21 @@ public class UserService {
         userRepository.save(userUpdate);
     }
 
-    public String getUserToken(LoginUserModel model) {
+    public LoginUserResponse getUserToken(LoginUserModel model) {
         DBUser user = userRepository.findByEmailAndPassword(model.getEmail(), model.getPassword())
                 .orElseThrow(() -> new IllegalStateException("Invalid username or password"));
 
         Algorithm algorithm = Algorithm.HMAC256("secret");
-        return JWT.create()
+        String jwt = JWT.create()
                 .withIssuer("tutorServer")
                 .withClaim("id", user.getId())
                 .withClaim("type", "user")
                 .sign(algorithm);
+
+        LoginUserResponse userResponse = new LoginUserResponse();
+        userResponse.setToken(jwt);
+
+        return userResponse;
     }
 
     public void validateToken(String token, String id){
@@ -166,5 +170,28 @@ public class UserService {
         if(type.equals("user") && !id.equals(jwt.getClaim("id").toString())){
             throw new IllegalStateException("Invalid token");
         }
+    }
+
+    public UserResponse getUserDetails(String token) {
+        DecodedJWT jwt = JWT.decode(token);
+        String type = jwt.getClaim("type").asString();
+
+        if (!"user".equals(type)) {
+            throw new IllegalStateException("Invalid token type");
+        }
+
+        String tutorId = jwt.getClaim("id").toString();
+
+        DBUser dbUser = userRepository.getById(Long.valueOf(tutorId));
+        UserResponse userResponse = new UserResponse();
+        userResponse.setId(dbUser.getId());
+        userResponse.setFirstName(dbUser.getFirstName());
+        userResponse.setLastName(dbUser.getLastName());
+        userResponse.setUsername(dbUser.getUsername());
+        userResponse.setEmail(dbUser.getEmail());
+        userResponse.setCity(dbUser.getCity());
+        userResponse.setPhoneNumber(dbUser.getPhoneNumber());
+
+        return userResponse;
     }
 }

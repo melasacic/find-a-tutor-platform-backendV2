@@ -25,6 +25,7 @@ public class DBTutor {
     private String email;
     private String city;
     private String phoneNumber;
+    private Double rating;
 
     public DBTutor() {
     }
@@ -127,6 +128,14 @@ public class DBTutor {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 
     @Override

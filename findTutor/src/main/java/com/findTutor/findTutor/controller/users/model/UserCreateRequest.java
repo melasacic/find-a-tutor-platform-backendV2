@@ -1,7 +1,7 @@
-package com.findTutor.findTutor.controller.tutors.model;
+package com.findTutor.findTutor.controller.users.model;
 
 
-public class TutorCreateRequest {
+public class UserCreateRequest {
     // json iz body-a treba da se mapira u ovu klasu, pa tek onda ona u DB object
     // json body -> TutorCreateRequest -> DBTutor
 
@@ -12,15 +12,6 @@ public class TutorCreateRequest {
     private String email;
     private String city;
     private String phoneNumber;
-    private String instructionsType;
-
-    public String getInstructionsType() {
-        return instructionsType;
-    }
-
-    public void setInstructionsType(String instructionsType) {
-        this.instructionsType = instructionsType;
-    }
 
     public String getFirstName() {
         return firstName;

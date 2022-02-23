@@ -1,11 +1,6 @@
-package com.findTutor.findTutor.controller.tutors.model;
+package com.findTutor.findTutor.controller.users.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-
-public class TutorResponse {
+public class UserResponse {
     // treba da ima sva polja koja hoces da vratis nazad kroz GET request
 
     private Long id;
@@ -15,28 +10,17 @@ public class TutorResponse {
     private String email;
     private String city;
     private String phoneNumber;
-    private Double rating;
-    private String instructionsType;
 
-    public String getInstructionsType() {
-        return instructionsType;
+    public UserResponse() {
     }
 
-    public void setInstructionsType(String instructionsType) {
-        this.instructionsType = instructionsType;
-    }
-
-    public TutorResponse() {
-    }
-
-    public TutorResponse(Long id,
-                         String firstName,
-                         String lastName,
-                         String username,
-                         String email,
-                         String city,
-                         String phoneNumber,
-                         String instructionsType) {
+    public UserResponse(Long id,
+                        String firstName,
+                        String lastName,
+                        String username,
+                        String email,
+                        String city,
+                        String phoneNumber) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -44,7 +28,6 @@ public class TutorResponse {
         this.email = email;
         this.city = city;
         this.phoneNumber = phoneNumber;
-        this.instructionsType = instructionsType;
     }
 
     public Long getId() {
@@ -103,14 +86,6 @@ public class TutorResponse {
         this.phoneNumber = phoneNumber;
     }
 
-    public Double getRating() {
-        return rating == null ? 0 : rating;
-    }
-
-    public void setRating(Double rating) {
-        this.rating = rating;
-    }
-
     @Override
     public String toString() {
         return "TutorResponse{" +
@@ -121,7 +96,6 @@ public class TutorResponse {
                 ", email='" + email + '\'' +
                 ", city='" + city + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", instructionsType='" + instructionsType + '\'' +
                 '}';
     }
 }

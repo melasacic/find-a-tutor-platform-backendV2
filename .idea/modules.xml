@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Find-a-Tutor-Platform-backend.iml" filepath="$PROJECT_DIR$/.idea/Find-a-Tutor-Platform-backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/findTutor.iml" filepath="$PROJECT_DIR$/.idea/findTutor.iml" />
     </modules>
   </component>
 </project>

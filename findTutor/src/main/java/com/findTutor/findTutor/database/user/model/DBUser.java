@@ -1,20 +1,20 @@
-package com.findTutor.findTutor.database.tutor.model;
+package com.findTutor.findTutor.database.user.model;
 
 import javax.persistence.*;
 
 @Entity
 @Table
-public class DBTutor {
+public class DBUser {
 
     @Id
     @SequenceGenerator(
-            name = "tutor_sequence",
-            sequenceName = "tutor_sequence",
+            name = "user_sequence",
+            sequenceName = "user_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "tutor_sequence"
+            generator = "user_sequence"
     )
 
     private Long id;
@@ -25,21 +25,18 @@ public class DBTutor {
     private String email;
     private String city;
     private String phoneNumber;
-    private Double rating;
-    private String instructionsType;
 
-    public DBTutor() {
+    public DBUser() {
     }
 
-    public DBTutor(Long id,
-                   String firstName,
-                   String lastName,
-                   String username,
-                   String password,
-                   String email,
-                   String city,
-                   String phoneNumber,
-                   String instructionsType) {
+    public DBUser(Long id,
+                  String firstName,
+                  String lastName,
+                  String username,
+                  String password,
+                  String email,
+                  String city,
+                  String phoneNumber) {
 
         this.id = id;
         this.firstName = firstName;
@@ -49,17 +46,15 @@ public class DBTutor {
         this.email = email;
         this.city = city;
         this.phoneNumber = phoneNumber;
-        this.instructionsType = instructionsType;
     }
 
-    public DBTutor(String firstName,
-                   String lastName,
-                   String username,
-                   String password,
-                   String email,
-                   String city,
-                   String phoneNumber,
-                   String instructionsType) {
+    public DBUser(String firstName,
+                  String lastName,
+                  String username,
+                  String password,
+                  String email,
+                  String city,
+                  String phoneNumber) {
 
         this.firstName = firstName;
         this.lastName = lastName;
@@ -68,15 +63,6 @@ public class DBTutor {
         this.email = email;
         this.city = city;
         this.phoneNumber = phoneNumber;
-        this.instructionsType = instructionsType;
-    }
-
-    public String getInstructionsType() {
-        return instructionsType;
-    }
-
-    public void setInstructionsType(String instructionsType) {
-        this.instructionsType = instructionsType;
     }
 
     public Long getId() {
@@ -143,14 +129,6 @@ public class DBTutor {
         this.phoneNumber = phoneNumber;
     }
 
-    public Double getRating() {
-        return rating;
-    }
-
-    public void setRating(Double rating) {
-        this.rating = rating;
-    }
-
     @Override
     public String toString() {
         return "Tutor{" +
@@ -162,7 +140,6 @@ public class DBTutor {
                 ", email='" + email + '\'' +
                 ", city='" + city + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", instructionsType ='" + instructionsType + '\'' +
                 '}';
     }
 }
